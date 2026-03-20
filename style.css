@@ -1,0 +1,270 @@
+/* --- BASE Y RESPONSIVE --- */
+:root {
+    --cyan: #00f3ff;
+    --red: #ff0055;
+    --purple: #bc13fe;
+    --gold: #ffd700;
+    --safe-top: env(safe-area-inset-top, 10px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; -webkit-user-select: none; }
+
+body {
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    position: fixed;
+}
+
+#gameCanvas { display: block; width: 100%; height: 100%; }
+
+/* --- EFECTOS --- */
+#scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 10;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+}
+
+#damageOverlay {
+    position: fixed; inset: 0; pointer-events: none; z-index: 11;
+    background: radial-gradient(circle, transparent 50%, rgba(255,0,0,0.3) 100%);
+    opacity: 0; transition: opacity 0.2s;
+}
+
+/* --- HUD SUPERIOR (DISEÑO MÓVIL) --- */
+#hud {
+    position: fixed; top: var(--safe-top); left: 0; width: 100%;
+    padding: 0 15px; display: grid; grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 8px; z-index: 100; pointer-events: none;
+}
+
+.hud-module {
+    background: rgba(0, 5, 15, 0.8); border: 1px solid rgba(0, 243, 255, 0.2);
+    padding: 6px; border-radius: 4px; backdrop-filter: blur(4px);
+}
+
+.survival { border-left: 3px solid var(--red); display: flex; flex-direction: column; gap: 4px; }
+.hp-row { display: flex; align-items: center; gap: 4px; }
+.mini-label { font-size: 10px; color: var(--cyan); font-weight: bold; }
+.bar-bg { flex-grow: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+#healthBar { height: 100%; background: var(--red); width: 100%; transition: width 0.3s; }
+#healthText { font-size: 9px; color: white; min-width: 30px; }
+
+.extra-row { display: flex; justify-content: space-between; align-items: center; min-height: 10px; }
+#shieldBars { display: flex; gap: 2px; }
+.shield-bar { width: 4px; height: 8px; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+.nrg-bg { width: 40px; height: 4px; background: rgba(0,0,0,0.5); }
+#speedBar { height: 100%; background: var(--gold); width: 0%; }
+
+.wave-compact { text-align: center; border-top: 2px solid var(--purple); }
+#waveNumber { font-size: 18px; font-weight: bold; color: white; display: block; }
+.wave-line { height: 2px; background: rgba(188, 19, 254, 0.2); margin: 2px 0; }
+#waveProgress { height: 100%; background: var(--purple); width: 0%; }
+#enemyCount { font-size: 8px; color: #888; }
+
+.economy { text-align: right; border-right: 3px solid var(--gold); }
+#moneyText { color: var(--gold); font-size: 16px; font-weight: bold; }
+#scoreText { color: white; font-size: 12px; opacity: 0.8; }
+
+/* --- CONTROLES (AGRANDADOS) --- */
+#controls {
+    position: fixed; bottom: 30px; left: 0; width: 100%;
+    padding: 0 40px; display: flex; justify-content: space-between;
+    pointer-events: none; z-index: 100;
+}
+
+#joystickZone, #fireJoystickZone {
+    width: 150px; height: 150px; position: relative; pointer-events: auto;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+}
+
+#joystickBase, #fireJoystickBase {
+    width: 100%; height: 100%; border: 2px solid rgba(255,255,255,0.1); border-radius: 50%;
+}
+
+#joystickStick, #fireJoystickStick {
+    width: 60px; height: 60px; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 2px solid var(--cyan);
+}
+#fireJoystickStick { border-color: var(--red); }
+
+/* --- OVERLAY DE TIENDA --- */
+#shopOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 5, 10, 0.95);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.shop-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--purple);
+    padding-bottom: 10px;
+}
+
+.shop-title-group h1 { color: var(--gold); font-size: 24px; letter-spacing: 2px; }
+.shop-title-group p { color: #888; font-size: 12px; }
+
+.shop-money-badge {
+    background: var(--gold);
+    color: #000;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* FILA HORIZONTAL DE CARTAS */
+.shop-items-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+.shop-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--item-color);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 180px;
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.shop-card:active { transform: scale(0.95); }
+
+.card-tag {
+    font-size: 8px;
+    font-weight: bold;
+    color: var(--item-color);
+    margin-bottom: 8px;
+}
+
+.card-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 8px var(--item-color));
+}
+
+.card-info h3 {
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.card-info p {
+    font-size: 10px;
+    color: #bbb;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.card-price {
+    margin-top: auto;
+    font-weight: bold;
+    color: var(--gold);
+    font-size: 16px;
+}
+
+.cant-afford {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.shop-close-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #666;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* --- GAME OVER CORREGIDO --- */
+#gameOver {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    font-family: 'Courier New', monospace;
+    color: white;
+    text-align: center;
+}
+
+/* Esta es la clase que el JS activa */
+#gameOver.active {
+    display: flex !important;
+}
+
+.go-content {
+    padding: 30px;
+    border: 2px solid var(--red);
+    background: #050505;
+    box-shadow: 0 0 30px rgba(255, 0, 85, 0.4);
+    max-width: 80%;
+}
+
+.go-content h1 {
+    font-size: 40px;
+    color: var(--red);
+    text-shadow: 0 0 15px var(--red);
+    margin-bottom: 20px;
+    letter-spacing: 5px;
+}
+
+.go-content p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.go-content span {
+    color: var(--cyan);
+    font-weight: bold;
+}
+
+#restartBtn {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: transparent;
+    border: 2px solid var(--cyan);
+    color: var(--cyan);
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+#restartBtn:active {
+    background: var(--cyan);
+    color: #000;
+}

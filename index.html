@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Geometry Warfare Web</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div id="scanlines"></div>
+    <div id="damageOverlay"></div>
+    <canvas id="gameCanvas" tabindex="0"></canvas>
+
+    <div id="hud">
+        <div class="hud-module survival">
+            <div class="hp-row">
+                <span class="mini-label">HP</span>
+                <div class="bar-bg"><div id="healthBar"></div></div>
+                <span id="healthText">60/60</span>
+            </div>
+            <div class="extra-row" id="speedContainer">
+                <div id="shieldBars"></div>
+                <div class="nrg-bg"><div id="speedBar"></div></div>
+            </div>
+            <div id="modifierContainer"><span id="modifierText"></span></div>
+        </div>
+
+        <div class="hud-module wave-compact">
+            <span id="waveNumber">1</span>
+            <div class="wave-line"><div id="waveProgress"></div></div>
+            <span id="enemyCount">0/5</span>
+        </div>
+
+        <div class="hud-module economy">
+            <div id="moneyText">$0</div>
+            <div id="scoreText">0</div>
+            <div id="ammoText" style="font-size: 10px; color: #ffaa00;">30/30</div>
+        </div>
+    </div>
+
+    <div id="waveNotification">
+        <h2 id="notifTitle">Orda 1</h2>
+        <p id="notifSub"></p>
+    </div>
+    <div id="bossWarning">⚠ Jefe Inminente ⚠</div>
+    <div id="reloadText">Recargando...</div>
+
+    <div id="shopOverlay" style="display: none;">
+        </div>
+
+    <div id="controls">
+        <div id="joystickZone">
+            <div id="joystickBase"></div>
+            <div id="joystickStick"></div>
+        </div>
+        <div id="fireJoystickZone">
+            <div id="fireJoystickBase"></div>
+            <div id="fireJoystickStick"></div>
+        </div>
+    </div>
+
+    <div id="gameOver">
+        <div class="go-content">
+            <h1>Game Over</h1>
+            <p>Oleada: <span id="finalWave">1</span></p>
+            <p>Puntos: <span id="finalScore">0</span></p>
+            <button id="restartBtn">Jugar</button>
+        </div>
+    </div>
+
+    <script src="scripts/config.js"></script>
+    <script src="scripts/entities.js"></script>
+    <script src="scripts/shop.js"></script>
+    <script src="scripts/waveSystem.js"></script>
+    <script src="scripts/controls.js"></script>
+    <script src="scripts/renderer.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
